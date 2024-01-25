@@ -1,16 +1,16 @@
 from setuptools import setup
 
 
-def readme():
+def get_readme():
     with open('README.md') as f:
         return f.read()
 
 
 setup(
     name='airgoodies',
-    version='0.0.1-alpha',
+    version='0.0.2',
     description='Various goodies for Apache Airflow',
-    long_description="""### [Airgoodies](https://github.com/stav121/apache-airflow-goodies)""",
+    long_description=get_readme(),
     long_description_content_type='text/markdown',
     author='Stavros Grigoriou',
     author_email='unix121@protonmail.com',
