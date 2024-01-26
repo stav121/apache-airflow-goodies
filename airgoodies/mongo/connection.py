@@ -1,5 +1,6 @@
 """
-@author Stavros Grigoriou <unix121@protonmail.com>
+@author: Stavros Grigoriou <unix121@protonmail.com>
+@since: 0.0.1-alpha
 """
 
 
@@ -11,10 +12,10 @@ class MongoConnection:
     with the configured MongoDB.
     """
 
-    __conn_url: str
-    __db_name: str
-    __client: MongoClient
-    __db: Database
+    _conn_url: str
+    _db_name: str
+    _client: MongoClient
+    _db: Database
 
     def __init__(self):
         """
@@ -28,22 +29,23 @@ class MongoConnection:
         from airflow.models import Variable
         from airgoodies.common.exception import ConfigNotFoundException
         from pymongo import MongoClient
+        from airgoodies.common.variables import MongoVariables
 
         logger = logging.getLogger('airflow.task')
 
         logger.info('Retrieving Mongo connection')
-        self.__conn_url = Variable.get('airgoodies-mongo-db-connection-url')
-        self.__db_name = Variable.get('airgoodies-mongo-db-name')
+        self._conn_url = Variable.get(key=MongoVariables.CONNECTION_URL)
+        self._db_name = Variable.get(key=MongoVariables.DEFAULT_DB_NAME)
 
         # Raise exception if none of the above were found.
-        if not self.__conn_url:
-            raise ConfigNotFoundException('airgoodies-mongo-db-connection-url')
-        if not self.__db_name:
-            raise ConfigNotFoundException('airgoodies-mongo-db-name')
+        if not self._conn_url:
+            raise ConfigNotFoundException(MongoVariables.CONNECTION_URL)
+        if not self._db_name:
+            raise ConfigNotFoundException(MongoVariables.DEFAULT_DB_NAME)
 
         logger.info('Connecting to MongoDB...')
-        self.__client = MongoClient(host=self.__conn_url)
-        self.__db = self.__client.get_database(name=self.__db_name)
+        self._client = MongoClient(host=self._conn_url)
+        self._db = self._client.get_database(name=self._db_name)
         logger.info('Connected successfully')
 
     def get_db(self) -> Database:
@@ -51,4 +53,4 @@ class MongoConnection:
         Get the created database connection.
         :return: the created database connection.
         """
-        return self.__db
+        return self._db
