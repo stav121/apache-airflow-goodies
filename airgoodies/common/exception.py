@@ -23,3 +23,21 @@ class ValueNotFoundException(Exception):
 
     def __init__(self, property: str):
         super().__init__(f'Could not located property with name <{property}>')
+
+
+class FileNotFoundException(Exception):
+    """
+    Exception to be thrown when the provided file was not found.
+    """
+
+    def __init__(self, filename: str):
+        super().__init__(f'Could not locate file with name <{filename}>')
+
+
+class UnsupportedFileFormatException(Exception):
+    """
+    Exception to be thrown when the provided file format is not supported.
+    """
+
+    def __init__(self):
+        super().__init__('Unsupported file format')
