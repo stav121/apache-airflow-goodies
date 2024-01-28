@@ -83,21 +83,27 @@ class S3Wrapper:
         :param sep: (optional) csv separator
         :return: Pandas DataFrame
         """
-        from pandas import read_csv
+        from pandas import read_csv, read_excel
         from io import StringIO
+        from airgoodies.common.exception import FileNotFoundException, UnsupportedFileFormatException
 
         file: StringIO = StringIO(self.load_file(key=key, bucket_name=bucket_name))
 
-        if key.endswith('.csv'):
+        if file is None:
+            raise FileNotFoundException(filename=key)
+
+        if key.lower().endswith('.csv'):
             return read_csv(filepath_or_buffer=file, sep=sep)
+        elif key.lower().endswith(('.xls', '.xlsx')):
+            return read_excel(io=file)
         else:
-            raise Exception('Unsupported filetype')
+            raise UnsupportedFileFormatException()
 
     def load_and_transform(self,
                            key: str,
                            bucket_name: str | None = None,
                            transform_method: Callable[[DataFrame], DataFrame] | None = None,
-                           sep: str = ',') \
+                           sep: str | None = None) \
             -> DataFrame:
         """
         Load the provided key from S3 and perform the provided transform action on it.
@@ -123,7 +129,7 @@ class S3Wrapper:
                       load_table_name: str,
                       bucket_name: str | None = None,
                       transform_method: Callable[[DataFrame], DataFrame] | None = None,
-                      sep: str = ',') \
+                      sep: str | None = None) \
             -> str:
         """
         Load the provided file into the provided mongoDB table.
