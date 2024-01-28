@@ -13,21 +13,23 @@ Current version matrix:
 
 | Airgoodies Version                                                                         | Apache Airflow Version | Python Version | Project tag                                                                                 |
 |--------------------------------------------------------------------------------------------|------------------------|----------------|---------------------------------------------------------------------------------------------|
+| [0.0.3](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3)             | 2.7.2                  | 3.11           | [v0.0.3](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3)             |
 | [0.0.2](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.2)             | 2.7.2                  | 3.11           | [v0.0.2](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.2)             |
 | [0.0.1-alpha](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.1-alpha) | 2.7.2                  | 3.11           | [v0.0.1-alpha](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.1-alpha) |
 
-Provided goodies for version [0.0.1-alpha](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.1-alpha):
+Provided goodies for version [0.0.3](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3):
 
-| Module           | Description                             | Dependency Versions |
-|------------------|-----------------------------------------|---------------------|
-| airgoodies.mongo | API for easy interaction with MongoDB   | pymongo==4.5.0      |
-| airgoodies.xcom  | API for managing variables through XCom | *None*              |
+| Module           | Description                             | Dependency Versions                                      |
+|------------------|-----------------------------------------|----------------------------------------------------------|
+| airgoodies.aws   | API for reasy interaction with AWS      | pandas==2.1.1<br>apache-airflow-providers-amazon===8.7.1 |
+| airgoodies.mongo | API for easy interaction with MongoDB   | pymongo==4.5.0                                           |
+| airgoodies.xcom  | API for managing variables through XCom | *None*                                                   |
 
 ### Usage
 
 ```
 # requirements.txt
-airgoodies=0.0.2
+airgoodies=0.0.3
 ```
 
 ### Example usage

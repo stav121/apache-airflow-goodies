@@ -1,5 +1,6 @@
 """
 @author: Stavros Grigoriou <unix121@protonmail.com>
+@since: 0.0.2
 """
 
 
@@ -11,11 +12,11 @@ class XComManager:
     from airflow.models.taskinstance import TaskInstance
     import logging
 
-    __logger: logging.Logger = logging.getLogger(name='airflow.task')
-    __ti: TaskInstance
-    __task_id: str
-    __run_id: str
-    __shared_data: dict = {}
+    _logger: logging.Logger = logging.getLogger(name='airflow.task')
+    _ti: TaskInstance
+    _task_id: str
+    _run_id: str
+    _shared_data: dict = {}
 
     def __init__(self, ti: TaskInstance) -> None:
         """
@@ -29,16 +30,16 @@ class XComManager:
         from airflow.models.taskinstance import TaskInstance
         import json
 
-        self.__ti: TaskInstance = ti
-        self.__task_id: str = ti.task_id
-        self.__run_id: str = ti.run_id
-        self.__logger.info(msg=f'Initializing XCom manager for task {self.__task_id}')
-        __xcom_val: str = ti.xcom_pull(key=f'{self.__run_id}_variables')
-        if __xcom_val is None:
-            self.__shared_data: dict = {}
+        self._ti: TaskInstance = ti
+        self._task_id: str = ti.task_id
+        self._run_id: str = ti.run_id
+        self._logger.info(msg=f'Initializing XCom manager for task {self._task_id}')
+        _xcom_val: str = ti.xcom_pull(key=f'{self._run_id}_variables')
+        if _xcom_val is None:
+            self._shared_data: dict = {}
         else:
-            self.__shared_data: dict = json.loads(__xcom_val)
-        self.__logger.info(self.__shared_data)
+            self._shared_data: dict = json.loads(_xcom_val)
+        self._logger.info(self._shared_data)
 
     def get_variable(self, name: str) -> str | dict:
         """
@@ -48,10 +49,10 @@ class XComManager:
         """
         from airgoodies.common.exception import ValueNotFoundException
 
-        if not self.__shared_data[name]:
+        if not self._shared_data[name]:
             raise ValueNotFoundException(property=name)
 
-        return self.__shared_data[name]
+        return self._shared_data[name]
 
     def set_variable(self, name: str, value: str | dict) -> None:
         """
@@ -59,28 +60,28 @@ class XComManager:
         :param name: the name of the variable
         :param value: the value to be saved
         """
-        self.__shared_data[name] = value
-        self.__dump_variables()
+        self._shared_data[name] = value
+        self._dump_variables()
 
     def remove_variable(self, name: str) -> None:
         """
         Remove a value from the shared variables of the DAG run.
         :param name: name of the variable
         """
-        del self.__shared_data[name]
-        self.__dump_variables()
+        del self._shared_data[name]
+        self._dump_variables()
 
     def clear_variables(self) -> None:
         """
         Clear the variables of the dag run.
         """
-        self.__shared_data = {}
-        self.__dump_variables()
+        self._shared_data = {}
+        self._dump_variables()
 
-    def __dump_variables(self) -> None:
+    def _dump_variables(self) -> None:
         """
-        Push the current value of self.__shared_data variables to XCom
+        Push the current value of self._shared_data variables to XCom
         """
         import json
 
-        self.__ti.xcom_push(key=f'{self.__run_id}_variables', value=json.dumps(self.__shared_data))
+        self._ti.xcom_push(key=f'{self._run_id}_variables', value=json.dumps(self._shared_data))
