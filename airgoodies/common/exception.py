@@ -13,7 +13,8 @@ class ConfigNotFoundException(Exception):
     """
 
     def __init__(self, variable: str):
-        super().__init__(f'Airflow Variable with name <{variable}> was not found')
+        super().__init__(
+            f'Airflow Variable with name <{variable}> was not found')
 
 
 class ValueNotFoundException(Exception):

@@ -18,6 +18,11 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Format code using yapf
+        run: |
+          pip install --upgrade yapf
+          
+          yapf airgoodies/ -r -i
       - name: Build wheel and install
         run: |
           pip install --upgrade setuptools

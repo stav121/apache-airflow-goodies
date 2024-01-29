@@ -2,3 +2,4 @@ pymongo==4.5.0
 apache-airflow==2.7.2
 apache-airflow-providers-amazon==8.7.1
 pandas==2.1.1
+pyyaml==6.0.1

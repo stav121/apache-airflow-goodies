@@ -1,4 +1,4 @@
 {
-  "airgoodies-aws-s3-connection-name": "",
-  "airgoodies-aws-s3-default-bucket": ""
+  "${dag_id}.airgoodies-aws-s3-connection-name": "",
+  "${dag_id}.airgoodies-aws-s3-default-bucket": ""
 }
