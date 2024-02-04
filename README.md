@@ -44,6 +44,10 @@ To build the project:
 $ python3 setup.py sdist bdist_wheel
 ```
 
+### License
+
+This project is available under the MIT License.
+
 ### Author
 
 Stavros Grigoriou ([stav121](https://github.com/stav121))
