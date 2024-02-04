@@ -1,0 +1,3 @@
+{
+  "${dag_id}.airgoodies-task-aws-load-from-s3-to-mongo-input-file-variable": "input_file"
+}

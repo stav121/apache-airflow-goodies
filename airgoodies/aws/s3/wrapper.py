@@ -11,17 +11,23 @@ class S3Wrapper:
     Contains utilities such as, load CSV to pandas, load Excel etc.
     """
     from logging import Logger, getLogger
+    from airflow.models import TaskInstance
     from airflow.providers.amazon.aws.hooks.s3 import S3Hook
     from pandas import DataFrame
     from typing import Callable
     from airgoodies.mongo.connection import MongoConnection
+    from airgoodies.util.annotation import provide_dag_id
 
     _logger: Logger = getLogger('airflow.task')
     _conn_name: str
     _s3_hook: S3Hook
     _default_bucket: str = None
 
-    def __init__(self, connection_name: str | None = None) -> None:
+    @provide_dag_id
+    def __init__(self,
+                 dag_id: str = None,
+                 task_instance: TaskInstance = None,
+                 connection_name: str | None = None) -> None:
         """
         Initialize the connection to S3 with either the provided connection_name or
         the pre-configured from the variable:
@@ -38,19 +44,26 @@ class S3Wrapper:
         from airflow.models import Variable
         from airgoodies.common.exception import ConfigNotFoundException
         from airflow.providers.amazon.aws.hooks.s3 import S3Hook
-        from airgoodies.common.variables import AWSVariables
+        from airgoodies.common.variables import AWSVariables, Common
 
         if connection_name is None:
             # Load from variable
-            self._conn_name = Variable.get(key=AWSVariables.S3_CONNECTION_NAME)
+            self._conn_name = Variable.get(
+                key=AWSVariables.S3_CONNECTION_NAME.replace(
+                    Common.DAG_ID_VARIABLE, dag_id))
             if self._conn_name is None:
-                raise ConfigNotFoundException(AWSVariables.S3_CONNECTION_NAME)
+                raise ConfigNotFoundException(
+                    AWSVariables.S3_CONNECTION_NAME.replace(
+                        Common.DAG_ID_VARIABLE, dag_id))
         else:
             # Load from the provided name
             self._conn_name = connection_name
 
-        if Variable.get(key=AWSVariables.S3_DEFAULT_BUCKET) is not None:
-            self._default_bucket = Variable.get(key=AWSVariables.S3_DEFAULT_BUCKET)
+        if Variable.get(key=AWSVariables.S3_DEFAULT_BUCKET.replace(
+                Common.DAG_ID_VARIABLE, dag_id)) is not None:
+            self._default_bucket = Variable.get(
+                key=AWSVariables.S3_DEFAULT_BUCKET.replace(
+                    Common.DAG_ID_VARIABLE, dag_id))
 
         self._s3_hook: S3Hook = S3Hook(aws_conn_id=self._conn_name)
 
@@ -60,21 +73,32 @@ class S3Wrapper:
         """
         return self._s3_hook
 
-    def load_file(self, key: str, bucket_name: str | None = None) -> str | None:
+    def load_file(self,
+                  key: str,
+                  bucket_name: str | None = None) -> str | None:
         """
         Load the provided key from the provided or default bucket.
 
         :param key: the fully qualified key of the file
         :param bucket_name: alternative bucket name otherwise it will use the default
         """
+
         if bucket_name is None:
             bucket_name = self._default_bucket
 
-        file: str = self._s3_hook.read_key(key=key, bucket_name=bucket_name)
+        if key.endswith(('.xls', '.xlsx')):
+            file: str = self._s3_hook.get_key(
+                key=key, bucket_name=bucket_name).get()["Body"].read()
+        else:
+            file: str = self._s3_hook.read_key(key=key,
+                                               bucket_name=bucket_name)
 
         return file
 
-    def load_as_dataframe(self, key: str, bucket_name: str | None = None, sep: str = ',') -> DataFrame:
+    def load_as_dataframe(self,
+                          key: str,
+                          bucket_name: str | None = None,
+                          sep: str = ',') -> DataFrame:
         """
         Load the provided file from S3 into a pandas DataFrame.
 
@@ -87,15 +111,15 @@ class S3Wrapper:
         from io import StringIO
         from airgoodies.common.exception import FileNotFoundException, UnsupportedFileFormatException
 
-        file: StringIO = StringIO(self.load_file(key=key, bucket_name=bucket_name))
+        file: str = self.load_file(key=key, bucket_name=bucket_name)
 
         if file is None:
             raise FileNotFoundException(filename=key)
 
         if key.lower().endswith('.csv'):
-            return read_csv(filepath_or_buffer=file, sep=sep)
+            return read_csv(filepath_or_buffer=StringIO(file), sep=sep)
         elif key.lower().endswith(('.xls', '.xlsx')):
-            return read_excel(io=file)
+            return read_excel(io=file, header=None)
         else:
             raise UnsupportedFileFormatException()
 
@@ -116,7 +140,9 @@ class S3Wrapper:
         """
         from pandas import DataFrame
 
-        result: DataFrame = self.load_as_dataframe(key=key, bucket_name=bucket_name, sep=sep)
+        result: DataFrame = self.load_as_dataframe(key=key,
+                                                   bucket_name=bucket_name,
+                                                   sep=sep)
 
         if transform_method is None:
             return result
@@ -149,10 +175,16 @@ class S3Wrapper:
         data: DataFrame
 
         if transform_method is None:
-            data = self.load_as_dataframe(key=key, bucket_name=bucket_name, sep=sep)
+            data = self.load_as_dataframe(key=key,
+                                          bucket_name=bucket_name,
+                                          sep=sep)
         else:
-            data = self.load_and_transform(key=key, bucket_name=bucket_name, transform_method=transform_method, sep=sep)
+            data = self.load_and_transform(key=key,
+                                           bucket_name=bucket_name,
+                                           transform_method=transform_method,
+                                           sep=sep)
 
-        connection.get_db().get_collection(name=load_table_name).insert_many(loads(data.to_json(orient='records')))
+        connection.get_db().get_collection(name=load_table_name).insert_many(
+            loads(data.to_json(orient='records')))
 
         return load_table_name

@@ -1,4 +1,4 @@
 {
-  "airgoodies-mongo-db-connection-url": "",
-  "airgoodies-mongo-db-name": ""
+  "${dag_id}.airgoodies-mongo-db-connection-url": "",
+  "${dag_id}.airgoodies-mongo-db-name": ""
 }
