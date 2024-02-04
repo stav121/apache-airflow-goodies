@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # Script that builds the wheel of the project and creates a release
 #

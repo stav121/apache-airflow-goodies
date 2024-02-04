@@ -33,7 +33,8 @@ class XComManager:
         self._ti: TaskInstance = ti
         self._task_id: str = ti.task_id
         self._run_id: str = ti.run_id
-        self._logger.info(msg=f'Initializing XCom manager for task {self._task_id}')
+        self._logger.info(
+            msg=f'Initializing XCom manager for task {self._task_id}')
         _xcom_val: str = ti.xcom_pull(key=f'{self._run_id}_variables')
         if _xcom_val is None:
             self._shared_data: dict = {}
@@ -84,4 +85,5 @@ class XComManager:
         """
         import json
 
-        self._ti.xcom_push(key=f'{self._run_id}_variables', value=json.dumps(self._shared_data))
+        self._ti.xcom_push(key=f'{self._run_id}_variables',
+                           value=json.dumps(self._shared_data))
