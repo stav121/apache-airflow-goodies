@@ -5,7 +5,7 @@
 
 ```text
 # requirements.txt
-airgoodies==0.0.4
+airgoodies==0.0.5
 ```
 
 For all the available versions please check [here](https://pypi.org/project/airgoodies/)

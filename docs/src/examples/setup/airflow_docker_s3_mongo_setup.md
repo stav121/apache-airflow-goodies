@@ -90,7 +90,7 @@ For that, we open our `requirements.txt` and insert the following:
 
 ```requirements.txt
 # Add the requirement for `airgoodies`
-airgoodies==0.0.4
+airgoodies==0.0.5
 ```
 
 ### Starting the instance
@@ -290,7 +290,7 @@ The result should look like this:
 ### Conclusion
 
 This example demonstrates just a short example of the abilities of `airgoodies`, and it was created using
-the `airgoodies` version [v0.0.4](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3)
+the `airgoodies` version [v0.0.5](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.5)
 
 ### Author
 

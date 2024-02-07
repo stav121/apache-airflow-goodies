@@ -14,12 +14,13 @@ Current version matrix:
 
 | Airgoodies Version                                                                         | Apache Airflow Version | Python Version | Project tag                                                                                 |
 |--------------------------------------------------------------------------------------------|------------------------|----------------|---------------------------------------------------------------------------------------------|
+| [0.0.5](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.5)             | 2.7.2                  | 3.11           | [v0.0.5](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.5)             |
 | [0.0.4](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.4)             | 2.7.2                  | 3.11           | [v0.0.4](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.4)             |
 | [0.0.3](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3)             | 2.7.2                  | 3.11           | [v0.0.3](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.3)             |
 | [0.0.2](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.2)             | 2.7.2                  | 3.11           | [v0.0.2](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.2)             |
 | [0.0.1-alpha](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.1-alpha) | 2.7.2                  | 3.11           | [v0.0.1-alpha](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.1-alpha) |
 
-Provided goodies for version [0.0.4](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.4):
+Provided goodies for version [0.0.5](https://github.com/stav121/apache-airflow-goodies/releases/tag/v0.0.5):
 
 | Module             | Description                                     | Dependency Versions                                      |
 |--------------------|-------------------------------------------------|----------------------------------------------------------|
@@ -34,7 +35,7 @@ Add the following requirement in your `requirements.txt`
 
 ```
 # requirements.txt
-airgoodies=0.0.4
+airgoodies=0.0.5
 ```
 
 ### Example usage

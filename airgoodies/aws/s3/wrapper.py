@@ -126,7 +126,8 @@ class S3Wrapper:
     def load_and_transform(self,
                            key: str,
                            bucket_name: str | None = None,
-                           transform_method: Callable[[DataFrame], DataFrame] | None = None,
+                           transform_method: Callable[[DataFrame, dict], DataFrame] = None,
+                           transform_method_config: dict = None,
                            sep: str | None = None) \
             -> DataFrame:
         """
@@ -147,14 +148,15 @@ class S3Wrapper:
         if transform_method is None:
             return result
         else:
-            return transform_method(result)
+            return transform_method(result, transform_method_config)
 
     def load_to_mongo(self,
                       key: str,
                       connection: MongoConnection,
                       load_table_name: str,
-                      bucket_name: str | None = None,
-                      transform_method: Callable[[DataFrame], DataFrame] | None = None,
+                      bucket_name: str = None,
+                      transform_method: Callable[[DataFrame, dict], DataFrame] = None,
+                      transform_method_config: dict = None,
                       sep: str | None = None) \
             -> str:
         """
@@ -179,10 +181,12 @@ class S3Wrapper:
                                           bucket_name=bucket_name,
                                           sep=sep)
         else:
-            data = self.load_and_transform(key=key,
-                                           bucket_name=bucket_name,
-                                           transform_method=transform_method,
-                                           sep=sep)
+            data = self.load_and_transform(
+                key=key,
+                bucket_name=bucket_name,
+                transform_method=transform_method,
+                transform_method_config=transform_method_config,
+                sep=sep)
 
         connection.get_db().get_collection(name=load_table_name).insert_many(
             loads(data.to_json(orient='records')))

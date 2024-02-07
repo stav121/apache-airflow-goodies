@@ -42,6 +42,17 @@ class TaskConfig:
         self._logger.info(f'Loaded task config: {self._task_config}')
         self._logger.info(f'Config: {self._task_config["config"]}')
 
+    def get_config_dict(self) -> dict | None:
+        """
+        Retrieve the entire task configuration.
+
+        :return: the configuration dictionary or None
+        """
+
+        if 'config' in self._task_config:
+            return self._task_config['config']
+        return None
+
     def get_config(self, conf: str) -> str | None:
         """
         Retrieve the requested configuration from the `config` section.
