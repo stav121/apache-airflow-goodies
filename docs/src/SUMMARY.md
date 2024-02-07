@@ -8,5 +8,7 @@
     - [Task generation using YAML files](features/yaml.md)
     - [Predefined tasks](features/tasks/airgoodies.md)
         - [load_from_s3_to_mongo_table](features/tasks/s3/load_from_s3_to_mongo_table.md)
+            - [print_table_columns](features/tasks/s3/transform/print_table_columns.md)
+            - [drop_columns](features/tasks/s3/transform/drop_columns.md)
 - [Airgoodies by example](examples/overview.md)
     - [Airflow (Docker) + S3 + Mongo](examples/setup/airflow_docker_s3_mongo_setup.md)

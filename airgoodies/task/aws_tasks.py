@@ -44,7 +44,7 @@ def load_from_s3_to_mongo_table(ti: TaskInstance, **kwargs) -> None:
                                                 s3_wrapper=s3_wrapper,
                                                 task_id=ti.task_id)
 
-    transform_method: Callable[[DataFrame], DataFrame] | None = None
+    transform_method: Callable[[DataFrame, dict], DataFrame] | None = None
     if task_configuration.get_config(conf=AwsS3ToMongoTableOptions.
                                      AIRGOODIES_TRANSFORM_METHOD) is not None:
         # Load the transform method
@@ -77,4 +77,5 @@ def load_from_s3_to_mongo_table(ti: TaskInstance, **kwargs) -> None:
         key=input_file,
         connection=mongo_conn,
         transform_method=transform_method,
-        load_table_name=out_table_name)  # TODO: add to config
+        transform_method_config=task_configuration.get_config_dict(),
+        load_table_name=out_table_name)

@@ -7,11 +7,11 @@ directly from an S3 bucket into a MongoDB table, offering the ability to perform
 
 #### Transform method options
 
-| option                      | values                                                                                                                      |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| airgoodies_transform_method | print_table_contents                                                                                                        |
-| custom_transform_method     | `path.to.method`: the method must have the signature `Callable[[pandas.DataFrame], pandas.DataFrame]` (View examples below) |
-| output_table_name           | the name of the MongoDB collection to save the result into, default is `{dag_id}_output_table`                              |
+| option                      | values                                                                                                                            |
+|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| airgoodies_transform_method | [print_table_contents](transform/print_table_contents.md)<br/>[drop_columns](transform/drop_columns.md)                           |
+| custom_transform_method     | `path.to.method`: the method must have the signature `Callable[[pandas.DataFrame, dict], pandas.DataFrame]` (View examples below) |
+| output_table_name           | the name of the MongoDB collection to save the result into, default is `{dag_id}_output_table`                                    |
 
 #### Example YAML syntax
 
